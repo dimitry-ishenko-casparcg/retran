@@ -10,9 +10,10 @@ add_definitions(-DASIO_STANDALONE)
 add_definitions(-DVERSION=${PROJECT_VERSION})
 
 set(SOURCES
-    src/args.cpp    src/args.hpp
+    src/args.cpp      src/args.hpp
+    src/endpoints.cpp src/endpoints.hpp
     src/main.cpp
-    src/util.cpp    src/util.hpp
+    src/util.cpp      src/util.hpp
 )
 
 include(GNUInstallDirs)
