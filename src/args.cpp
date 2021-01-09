@@ -6,6 +6,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 #include "args.hpp"
+#include "util.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace src
@@ -18,23 +19,6 @@ namespace
 bool starts_with(const std::string& s, const std::string& prefix)
 {
     return s.compare(0, prefix.size(), prefix) == 0;
-}
-
-auto to_address(const std::string& s)
-{
-    asio::error_code ec;
-    return asio::ip::make_address(s, ec);
-}
-
-auto to_port(const std::string& s)
-{
-    char* end;
-    auto ul = std::strtoul(s.data(), &end, 0);
-
-    std::uint16_t p = 0;
-    if(ul <= UINT16_MAX && end == (s.data() + s.size())) p = ul;
-
-    return p;
 }
 
 }
