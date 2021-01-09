@@ -6,6 +6,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 #include "args.hpp"
+#include "endpoints.hpp"
+#include "server.hpp"
 #include "util.hpp"
 
 #include <asio.hpp>
@@ -69,14 +71,21 @@ int main(int argc, char* argv[])
         {
             if(args.path.empty())
             {
-                args.path = src::data_path() / name / "retran.conf";
+                args.path = src::data_path() / name / "endpoints.conf";
                 fs::create_directory(args.path.parent_path());
 
                 if(!fs::exists(args.path)) std::fstream{ args.path, std::ios::out };
             }
 
-            std::cout << "Reading configuration from " << args.path << std::endl;
-            //
+            std::cout << "Reading endpoints from " << args.path << std::endl;
+            auto remote = src::endpoints::read_from(args.path);
+
+            if(remote.size())
+            {
+                std::cout << "Remote endpoints: ";
+                for(auto const& ep : remote) std::cout << ep << ", ";
+                std::cout << std::endl;
+            }
 
             if(args.address.is_unspecified()) args.address = make_address("127.0.0.1");
             if(args.port == 0) args.port = 6250;
@@ -85,7 +94,7 @@ int main(int argc, char* argv[])
             std::cout << "Listening on " << local << std::endl;
 
             asio::io_context io;
-            //
+            src::server server{ io, local, remote };
 
             src::set_interrupt_callback([&](int signal)
             {
