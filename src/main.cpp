@@ -6,7 +6,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 #include "args.hpp"
-#include "system.hpp"
+#include "util.hpp"
 
 #include <asio.hpp>
 #include <filesystem>
@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
     int exit_code = 0;
     try
     {
-        auto name = fs::path(argv[0]).filename();
+        auto name = fs::path{ argv[0] }.filename();
 
         auto args = src::args::read_from(argc, argv);
         if(args.help)

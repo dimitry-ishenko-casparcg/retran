@@ -12,7 +12,6 @@ add_definitions(-DVERSION=${PROJECT_VERSION})
 set(SOURCES
     src/args.cpp    src/args.hpp
     src/main.cpp
-    src/system.cpp  src/system.hpp
     src/util.cpp    src/util.hpp
 )
 
