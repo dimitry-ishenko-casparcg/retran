@@ -9,7 +9,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 add_definitions(-DASIO_STANDALONE)
 add_definitions(-DVERSION=${PROJECT_VERSION})
 
-set(HEADERS )
 set(SOURCES
     src/args.cpp    src/args.hpp
     src/main.cpp
@@ -20,7 +19,7 @@ include(GNUInstallDirs)
 
 ########################
 # executable
-add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} pthread)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
