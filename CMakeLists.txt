@@ -13,6 +13,7 @@ set(SOURCES
     src/args.cpp      src/args.hpp
     src/endpoints.cpp src/endpoints.hpp
     src/main.cpp
+    src/server.cpp    src/server.hpp
     src/util.cpp      src/util.hpp
 )
 
