@@ -25,8 +25,6 @@ namespace src
 asio::ip::address to_address(const std::string&);
 std::uint16_t to_port(const std::string&);
 
-asio::ip::udp::endpoint to_endpoint(const std::string&);
-
 ////////////////////////////////////////////////////////////////////////////////
 using interrupt_callback = std::function<void (int)>;
 

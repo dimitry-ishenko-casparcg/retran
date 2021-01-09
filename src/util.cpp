@@ -34,17 +34,6 @@ std::uint16_t to_port(const std::string& s)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-asio::ip::udp::endpoint to_endpoint(const std::string& s)
-{
-    asio::ip::address address { };
-    std::uint16_t port = 0;
-
-    //
-
-    return asio::ip::udp::endpoint{ address, port };
-}
-
-////////////////////////////////////////////////////////////////////////////////
 void set_interrupt_callback(interrupt_callback cb)
 {
     static interrupt_callback cb_;
