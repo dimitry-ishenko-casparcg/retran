@@ -1,0 +1,11 @@
+[Unit]
+Description=OSC Re-transimission Gateway
+
+[Service]
+Environment="args="
+ExecStart=/usr/bin/retran $args
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
