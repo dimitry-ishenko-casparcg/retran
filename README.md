@@ -9,7 +9,7 @@ Receive OSC messages and re-transmit them to a list of predefined endpoints.
 Debian/Ubuntu/etc:
 
 ```shell
-$ ver=0.0
+$ ver=0.1
 $ url=https://github.com/dimitry-ishenko-casparcg/retran/releases/download/v${ver}
 $ wget ${url}/retran_${ver}_amd64.deb
 $ sudo apt install ./retran_${ver}_amd64.deb
@@ -18,7 +18,7 @@ $ sudo apt install ./retran_${ver}_amd64.deb
 RaspberryPi:
 
 ```shell
-$ ver=0.0
+$ ver=0.1
 $ url=https://github.com/dimitry-ishenko-casparcg/retran/releases/download/v${ver}
 $ wget ${url}/retran_${ver}_armhf.deb
 $ sudo apt install ./retran_${ver}_armhf.deb
@@ -29,7 +29,7 @@ $ sudo apt install ./retran_${ver}_armhf.deb
 Stable version (requires [CMake](https://cmake.org/) >= 3.1):
 
 ```shell
-$ ver=0.0
+$ ver=0.1
 $ wget https://github.com/dimitry-ishenko-casparcg/retran/archive/v${ver}.tar.gz
 $ tar xzf v${ver}.tar.gz
 $ mkdir retran-${ver}/build
