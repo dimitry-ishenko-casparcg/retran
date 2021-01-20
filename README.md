@@ -26,12 +26,14 @@ $ sudo apt install ./retran_${ver}_armhf.deb
 
 ### From source
 
-Stable version (requires [CMake](https://cmake.org/) >= 3.1):
+Stable version (requires [CMake](https://cmake.org/) >= 3.1 and
+[asio](https://think-async.com/Asio/)):
 
 ```shell
 $ ver=0.1
-$ wget https://github.com/dimitry-ishenko-casparcg/retran/archive/v${ver}.tar.gz
-$ tar xzf v${ver}.tar.gz
+$ url=https://github.com/dimitry-ishenko-casparcg/retran/releases/download/v${ver}
+$ wget ${url}/retran-${ver}.tar.bz2
+$ tar -xjf retran-${ver}.tar.bz2
 $ mkdir retran-${ver}/build
 $ cd retran-${ver}/build
 $ cmake ..
@@ -39,11 +41,11 @@ $ make
 $ sudo make install
 ```
 
-Latest master (requires[git](https://git-scm.com/) and
-[CMake](https://cmake.org/) >= 3.1):
+Latest master (requires [git](https://git-scm.com/),
+[CMake](https://cmake.org/) >= 3.1 and [asio](https://think-async.com/Asio/)):
 
 ```shell
-$ git https://github.com/dimitry-ishenko-casparcg/retran.git
+$ git clone --recursive https://github.com/dimitry-ishenko-casparcg/retran.git
 $ mkdir retran/build
 $ cd retran/build
 $ cmake ..
