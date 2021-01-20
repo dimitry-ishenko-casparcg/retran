@@ -16,7 +16,7 @@ namespace src
 
 ////////////////////////////////////////////////////////////////////////////////
 server::server(asio::io_context& io, const udp::endpoint& local, endpoints remote) :
-    recv_(io), send_(io), remote_(std::move(remote))
+    recv_{ io }, send_{ io }, remote_{ std::move(remote) }
 {
     recv_.open(udp::v4());
     recv_.bind(local);
@@ -34,7 +34,7 @@ void server::async_recv()
         if(!ec)
         {
             std::vector<char> data(recv_.available());
-            auto buffer = asio::buffer(data);
+            auto buffer{ asio::buffer(data) };
             udp::endpoint ep;
 
             try
