@@ -5,17 +5,17 @@
 // Distributed under the GNU GPL license. See the LICENSE.md file for details.
 
 ////////////////////////////////////////////////////////////////////////////////
-#include "args.hpp"
 #include "endpoints.hpp"
+#include "pgm/args.hpp"
 #include "server.hpp"
 #include "util.hpp"
 
 #include <asio.hpp>
+#include <exception>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 
-using namespace asio::ip;
 namespace fs = std::filesystem;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -25,24 +25,6 @@ namespace fs = std::filesystem;
 
 #define TEXT(x) TEXT_(x)
 #define TEXT_(x) #x
-
-////////////////////////////////////////////////////////////////////////////////
-std::string usage(const std::string& name)
-{
-    return "Usage: " + name + R"( [option] [path]
-
-Where [path] is an optional path to an alternative config file.
-
-Option is one or more of the following:
-
-    --address=<addr>    Specify IP address to bind to. Default: 127.0.0.1.
-
-    --help, -h          Print this help screen and exit.
-
-    --port=<n>          Specify port to listen on. Default: 6250.
-
-    --version, -v       Show version and exit.)";
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 std::string version(const std::string& name)
@@ -57,28 +39,35 @@ int main(int argc, char* argv[])
     try
     {
         auto name = fs::path{ argv[0] }.filename();
+        pgm::args args
+        {
+            { "-a", "--address", "addr", "Specify IP address to bind to. Default: 127.0.0.1." },
+            { "-p", "--port", "N",       "Specify port # to listen on. Default: 6260." },
+            { "-h", "--help",            "Print this help screen and exit."     },
+            { "-v", "--version",         "Show version number and exit."        },
+            { "endpoints?",              "Path to alternate endpoints file."    },
+        };
+        args.parse(argc, argv);
 
-        auto args = src::args::read_from(argc, argv);
-        if(args.help)
-        {
-            std::cout << usage(name) << std::endl;
-        }
-        else if(args.version)
-        {
+        if(args["--help"])
+            std::cout << args.usage(name) << std::endl;
+
+        else if(args["--version"])
             std::cout << version(name) << std::endl;
-        }
+
         else
         {
-            if(args.path.empty())
+            fs::path path{ args["endpoints"].value_or("") };
+            if(path.empty())
             {
-                args.path = src::data_path() / name / "endpoints.conf";
-                fs::create_directory(args.path.parent_path());
+                path = src::data_path() / name / "endpoints.conf";
 
-                if(!fs::exists(args.path)) std::fstream{ args.path, std::ios::out };
+                fs::create_directory(path.parent_path());
+                if(!fs::exists(path)) std::fstream{ path, std::ios::out };
             }
 
-            std::cout << "Reading endpoints from " << args.path << std::endl;
-            auto remote = src::endpoints::read_from(args.path);
+            std::cout << "Reading endpoints from " << path << "." << std::endl;
+            auto remote = src::endpoints::read_from(path);
 
             if(remote.size())
             {
@@ -87,22 +76,29 @@ int main(int argc, char* argv[])
                 std::cout << std::endl;
             }
 
-            if(args.address.is_unspecified()) args.address = make_address("127.0.0.1");
-            if(args.port == 0) args.port = 6250;
+            auto s{ args["--address"].value_or("127.0.0.1") };
+            auto address{ src::to_address(s) };
 
-            udp::endpoint local{ args.address, args.port };
-            std::cout << "Listening on " << local << std::endl;
+            if(address.is_unspecified())throw pgm::invalid_argument{ "Invalid IP address", s };
+
+            s = args["--port"].value_or("6250");
+            auto port{ src::to_port(s) };
+
+            if(port == 0) throw pgm::invalid_argument{ "Invalid port #", s };
+
+            asio::ip::udp::endpoint local{ address, port };
+            std::cout << "Listening on " << local << "." << std::endl;
 
             asio::io_context io;
             src::server server{ io, local, remote };
 
             src::set_interrupt_callback([&](int signal)
             {
-                std::cout << "Received signal " << signal << " - exiting" << std::endl;
+                std::cout << "Received signal " << signal << " - exiting." << std::endl;
                 io.stop();
             });
 
-            std::cout << "Starting event loop" << std::endl;
+            std::cout << "Starting event loop." << std::endl;
             io.run();
         }
     }

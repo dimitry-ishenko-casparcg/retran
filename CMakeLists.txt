@@ -10,7 +10,7 @@ add_definitions(-DASIO_STANDALONE)
 add_definitions(-DVERSION=${PROJECT_VERSION})
 
 set(SOURCES
-    src/args.cpp      src/args.hpp
+    pgm/args.cpp      pgm/args.hpp
     src/endpoints.cpp src/endpoints.hpp
     src/main.cpp
     src/server.cpp    src/server.hpp
@@ -40,5 +40,10 @@ set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
 set(CPACK_DEBIAN_PACKAGE_DEPENDS )
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+
+# source
+set(CPACK_SOURCE_GENERATOR TBZ2 ZIP)
+set(CPACK_SOURCE_PACKAGE_FILE_NAME ${PROJECT_NAME}-${PROJECT_VERSION})
+set(CPACK_SOURCE_IGNORE_FILES /\.git.*;/build.*;\.user$;/\.vscode.*)
 
 include(CPack)
