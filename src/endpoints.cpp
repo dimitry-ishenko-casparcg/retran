@@ -16,23 +16,23 @@ namespace src
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-endpoints endpoints::read_from(const fs::path& file)
+endpoints read_endpoints(const fs::path& file)
 {
-    std::fstream fs(file, std::ios::in);
-    if(!fs.good()) throw std::invalid_argument("Can't open file");
+    std::fstream fs{ file, std::ios::in };
+    if(!fs.good()) throw std::invalid_argument{ "Can't open file" };
 
     endpoints eps;
 
-    std::string line;
-    for(int n = 1; std::getline(fs, line); ++n)
+    std::string read;
+    for(int n = 1; std::getline(fs, read); ++n)
     {
-        std::stringstream ss(line);
+        std::stringstream ss{ read };
 
         std::string ep;
         ss >> std::ws >> ep >> std::ws;
         if(ep.empty() || ep[0] == '#') continue;
 
-        asio::ip::address address { };
+        asio::ip::address address{ };
         std::uint16_t port = 5250;
 
         auto p = ep.find(':');
@@ -40,14 +40,14 @@ endpoints endpoints::read_from(const fs::path& file)
         {
             address = to_address(ep.substr(0, p));
 
-            port = to_port(line.substr(p + 1));
-            if(port == 0) throw invalid_line(n, "Invalid port #");
+            port = to_port(read.substr(p + 1));
+            if(port == 0) throw invalid_line{ n, "Invalid port #" };
         }
         else address = to_address(ep);
 
-        if(address.is_unspecified()) throw invalid_line(n, "Invalid address");
+        if(address.is_unspecified()) throw invalid_line{ n, "Invalid address" };
 
-        if(!ss.eof()) throw invalid_line(n, "Garbage at end");
+        if(!ss.eof()) throw invalid_line{ n, "Garbage at end" };
 
         eps.emplace_back(address, port);
     }

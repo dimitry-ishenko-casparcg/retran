@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
             }
 
             std::cout << "Reading endpoints from " << path << "." << std::endl;
-            auto remote = src::endpoints::read_from(path);
+            auto remote = src::read_endpoints(path);
 
             if(remote.size())
             {

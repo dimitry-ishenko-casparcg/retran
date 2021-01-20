@@ -21,16 +21,15 @@ namespace src
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-struct endpoints : public std::vector<asio::ip::udp::endpoint>
-{
-    static endpoints read_from(const fs::path& path);
-};
+using endpoints = std::vector<asio::ip::udp::endpoint>;
+
+endpoints read_endpoints(const fs::path& path);
 
 ////////////////////////////////////////////////////////////////////////////////
 struct invalid_line : public std::invalid_argument
 {
     invalid_line(int n, const std::string& msg) :
-        std::invalid_argument(msg + " on line " + std::to_string(n))
+        std::invalid_argument{ msg + " on line " + std::to_string(n) }
     { }
 };
 
